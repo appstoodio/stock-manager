@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "205278438280",
+    "project_id": "estock-test-f09cb",
+    "storage_bucket": "estock-test-f09cb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:205278438280:android:d762cbc78644c2acbf903d",
+        "android_client_info": {
+          "package_name": "com.onecube.Rashdi_Mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADP454CyH1qJ-nMBz09mLh30tvzqJoEU8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
