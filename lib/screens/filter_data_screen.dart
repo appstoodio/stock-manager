@@ -128,13 +128,18 @@ class _FilteringScreenState extends State<FilteringScreen> {
             isGreaterThanOrEqualTo: filteringController.dateFilter);
       }
 
-      if (filteringController.selectedFromDate != null &&
-          filteringController.selectedToDate != null) {
+      if (filteringController.selectedFromDate.value != '') {
         // Filter by date range
 
         filteredQuery = filteredQuery.where('date',
-            isGreaterThanOrEqualTo: filteringController.selectedFromDate,
-            isLessThanOrEqualTo: filteringController.selectedToDate);
+            isGreaterThanOrEqualTo: filteringController.selectedFromDate.value);
+      }
+       if (filteringController.selectedToDate.value != '') {
+        // Filter by date range
+
+        filteredQuery = filteredQuery.where('date',
+          
+            isLessThanOrEqualTo: filteringController.selectedToDate.value);
       }
    } on FirebaseException catch (e) {
       // Check if the error is due to network unavailability
@@ -152,7 +157,7 @@ class _FilteringScreenState extends State<FilteringScreen> {
     }
 
     return StreamBuilder<QuerySnapshot>(
-      stream: filteredQuery.where('user', isEqualTo: user).snapshots(),
+      stream: filteredQuery.where('user', isEqualTo: user).orderBy('date', descending: true).snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
@@ -575,23 +580,23 @@ class _FilteringScreenState extends State<FilteringScreen> {
         const Text('Select Date Range:'),
         Row(
           children: [
-            TextButton(
+           Obx(() =>  TextButton(
               onPressed: () => _selectFromDate(context),
               child: Text(
-                filteringController.selectedFromDate != null
-                    ? filteringController.selectedFromDate!
+                filteringController.selectedFromDate.value != ''
+                    ? filteringController.selectedFromDate.value
                     : 'From Date',
               ),
-            ),
+            ),),
             const SizedBox(width: 10),
-            TextButton(
+           Obx(() =>  TextButton(
               onPressed: () => _selectToDate(context),
               child: Text(
-                filteringController.selectedToDate != null
-                    ? filteringController.selectedToDate!
+                filteringController.selectedToDate.value != ''
+                    ? filteringController.selectedToDate.value
                     : 'To Date',
               ),
-            ),
+            ),)
           ],
         ),
       ],
@@ -614,6 +619,7 @@ class _FilteringScreenState extends State<FilteringScreen> {
 
       // Set the formatted date to filteringController
       filteringController.setSelectedFromDate(formattedDate);
+    
     }
   }
 
@@ -626,13 +632,12 @@ class _FilteringScreenState extends State<FilteringScreen> {
     );
 
     if (selectedDate != null) {
-      // Format the selected date
-      // Format the selected date
+      
       String formattedDate =
           "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
-
-      // Set the parsed date to filteringController
-      filteringController.setSelectedToDate(formattedDate);
+    filteringController.setSelectedToDate(formattedDate); // Update UI (optional)
+    
+   
     }
   }
 }

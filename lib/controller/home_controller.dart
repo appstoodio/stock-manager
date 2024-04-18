@@ -31,7 +31,7 @@ class HomeController extends GetxController {
   final RxInt stockOutCount = 0.obs;
   final RxInt inHandCount = 0.obs;
   String? fromDate;
-  String? toDate;
+   String? toDate;
 
   @override
   void onInit() {

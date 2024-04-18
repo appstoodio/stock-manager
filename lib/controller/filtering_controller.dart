@@ -6,17 +6,19 @@ class FilteringController extends GetxController {
 double? selectedPromotion;
 String? todayDateFilter; 
 String? dateFilter; 
-   String? selectedFromDate;
-  String? selectedToDate;
+   RxString selectedFromDate = ''.obs;
+  RxString selectedToDate= ''.obs;
 
-  void setSelectedFromDate(String? date) {
-    selectedFromDate = date;
+  void setSelectedFromDate(String date) {
+    selectedFromDate.value = date;
     update(); // Notify UI to rebuild
+    print(selectedFromDate.value);
   }
 
-  void setSelectedToDate(String? date) {
-    selectedToDate = date;
+  void setSelectedToDate(String date) {
+    selectedToDate.value = date;
     update(); // Notify UI to rebuild
+    print(selectedToDate.value);
   }
 
   
@@ -54,8 +56,8 @@ void clearFilters() {
     selectedPromotion = null;
     todayDateFilter = null;
     dateFilter = null;
-    selectedFromDate = null;
-    selectedToDate = null;
+    selectedFromDate.value = '';
+    selectedToDate.value = '';
   }
   
 }

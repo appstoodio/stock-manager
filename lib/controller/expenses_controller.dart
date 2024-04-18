@@ -20,8 +20,8 @@ class ExpensesController extends GetxController {
   final RxList<QueryDocumentSnapshot<Map<String, dynamic>>> expenses =
       RxList<QueryDocumentSnapshot<Map<String, dynamic>>>([]);
   final RxBool isLoading = RxBool(false);
-  String? fromDate;
-  String? toDate;
+  RxString fromDate = ''.obs;
+  RxString toDate = ''.obs;
 
   @override
   void onInit() {
@@ -84,7 +84,7 @@ class ExpensesController extends GetxController {
       // Format the selected date
       String formattedDate =
           "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
-      fromDate = formattedDate;
+      fromDate.value = formattedDate;
       update();
     }
   } //=========================================================
@@ -103,7 +103,7 @@ class ExpensesController extends GetxController {
       // Format the selected date
       String formattedDate =
           "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
-      toDate = formattedDate;
+      toDate.value = formattedDate;
       update();
     }
   } //=====================================
@@ -120,25 +120,30 @@ class ExpensesController extends GetxController {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextButton(
-                  onPressed: () {
-                    fromDateSelect(context);
-                    update();
-                  },
-                  child: Text(fromDate ?? 'Select From Date')),
-              TextButton(
+              Obx(
+                () => TextButton(
+                    onPressed: () {
+                      fromDateSelect(context);
+                      update();
+                    },
+                    child: Text(fromDate.value == ''
+                        ? 'Select From Date'
+                        : fromDate.value)),
+              ),
+              Obx(() => TextButton(
                   onPressed: () {
                     toDateSelect(context);
                     update();
                   },
-                  child: Text(toDate ?? 'Select To Date'))
+                  child: Text(
+                      toDate.value == '' ? 'Select To Date' : toDate.value)))
             ],
           ),
           actions: [
             TextButton(
               onPressed: () {
-                fromDate = null;
-                toDate = null;
+                fromDate.value = '';
+                toDate.value = '';
               },
               child: const Text('Clear Filters'),
             ),
@@ -170,7 +175,7 @@ class ExpensesController extends GetxController {
           .collection('expenses')
           .where('user', isEqualTo: user)
           .where('date',
-              isGreaterThanOrEqualTo: fromDate, isLessThanOrEqualTo: toDate)
+              isGreaterThanOrEqualTo: fromDate.value, isLessThanOrEqualTo: toDate.value)
           .get(getSource);
 
       int total = 0;
